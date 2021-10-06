@@ -1,5 +1,5 @@
 to rund this programm
-* npm
+* shell code
   ```sh
   python start_jist /home/user/data /home/user/output
   ```
