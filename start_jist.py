@@ -212,7 +212,7 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
     #if flare is found
     found_flare  = 0
     #try mipav
-    mipav_end  = 1
+    mipav_end  = 5
     #search for mul in roy
     mul_bool = 0
     #patient id or name
@@ -220,7 +220,7 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
     #list every data in patient directory
     patient_data = os.listdir(patient_path)
     
-    try_id = 5
+    try_id = 0
 
     for data in patient_data:
         if "mprage_" in data.lower() and data.endswith('.nii'):
