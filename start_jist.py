@@ -199,8 +199,8 @@ daten = args.data_path[0]
 output_dir = args.output_path[0]
 
 
-# daten              = "/home/temuuleu/CSB_NeuroRad/temuuleu/Projekts/Belove/Belove_daten"
-# output_dir         = "/home/temuuleu/CSB_NeuroRad/temuuleu/Projekts/Belove/new_Belove_output_2"
+#daten              = "/home/temuuleu/CSB_NeuroRad/temuuleu/Projekts/Belove/Belove_daten"
+#output_dir         = "/home/temuuleu/CSB_NeuroRad/temuuleu/Projekts/Belove/new_Belove_output_2"
 
 
 #collect all patien dir
@@ -220,7 +220,7 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
     #list every data in patient directory
     patient_data = os.listdir(patient_path)
     
-    try_id    = 0
+    try_id = 5
 
     for data in patient_data:
         if "mprage_" in data.lower() and data.endswith('.nii'):
@@ -232,9 +232,6 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
             if "flair_" in data.lower() and (data.endswith('.nii') or data.endswith('.nii.gz'))\
                 and not "roi" in data.lower() and\
                 "mul" in data:
-                    
-                print("mul")
-                print(data)
                 
                 flair = data
                 found_flare  = 1   
@@ -249,12 +246,6 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
                 found_flare  = 1    
         
     if found_mprage == 1 and found_flare == 1:
-        
-        # patient_out_put_dir = output_dir+patien_dir_name+"/"
-        # mprage_dir = patient_path+"/"+mprage
-        # flair_dir = patient_path+"/"+flair
-        # new_patient_dir = output_dir +patien_dir_name
-        
         
         patient_out_put_dir = combine_paths([output_dir,patien_dir_name])+"/"
         mprage_dir          = combine_paths([patient_path,mprage])+"/"
@@ -271,7 +262,8 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
 
         print(output_string)
 
-        create_dir(new_patient_dir)
+        if not os.path.exists(new_patient_dir):
+            os.makedirs(new_patient_dir)
         
         new_patient_layout = modify_layout(new_patient_dir,mprage,
                       mprage_dir,flair,flair_dir)
@@ -286,17 +278,15 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
                 print("")
                 
                 layout_command = "sh layout_jist_java.sh "+new_patient_layout +" " +new_patient_dir
-                os.system(layout_command)
-                output =""
-                output += sp.getoutput(layout_command)
+                #os.system(layout_command)
+                output = sp.getoutput(layout_command)
                 print(output)
+                #output = subprocess.check_output(layout_command, shell=True)
                 
-            
-                
-                log_string = output_string+output
+                log_string = str(output_string)+str(output)
                 
                 #output = sp.getoutput("pwd")
-                mipav_text_path = new_patient_dir+"mipav_log"+str(try_id)+".txt"       
+                mipav_text_path = new_patient_dir+"mipav_log_"+str(try_id)+".txt"       
                     
                 mipav_output = open(mipav_text_path, "w")
                 mipav_output.write(log_string)
@@ -313,5 +303,4 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
             except:
                 mipav_end -= 1
                 print("mipav failed: trys : ",mipav_end)
-        break
         
