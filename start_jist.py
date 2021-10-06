@@ -278,7 +278,9 @@ for patien_idx , patient_path in enumerate(all_data_dir_list):
                 print("")
                 
                 layout_command = "sh layout_jist_java.sh "+new_patient_layout +" " +new_patient_dir
-                #os.system(layout_command)
+                
+                if try_id == 1:
+                    os.system(layout_command)
                 output = sp.getoutput(layout_command)
                 print(output)
                 #output = subprocess.check_output(layout_command, shell=True)
